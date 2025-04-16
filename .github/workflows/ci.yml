@@ -26,7 +26,7 @@ jobs:
       run: npm run build
 
     - name: Run Unit Tests
-      run: npm run eslint
+      run: npm run lint
 
     - name: Run Integration Tests (if defined)
       run: npm run test:integration || echo "No integration tests found, skipping..."
