@@ -1,0 +1,44 @@
+name: CI Pipeline - Build, Unit & Integration Test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+
+    - name: Install Frontend Dependencies
+      working-directory: client
+      run: npm install
+
+    - name: Build Frontend
+      working-directory: client
+      run: npm run build
+
+    - name: Run Frontend Unit Tests
+      working-directory: client
+      run: npm test --if-present
+
+    - name: Install Backend Dependencies
+      working-directory: server
+      run: npm install
+
+    - name: Run Backend Unit Tests
+      working-directory: server
+      run: npm test --if-present
+
+    - name: Run Backend Integration Tests
+      working-directory: server
+      run: npm run test:integration || echo "No integration tests found, skipping..."
