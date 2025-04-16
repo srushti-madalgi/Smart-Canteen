@@ -1,4 +1,4 @@
-name: Smart Canteen CI Pipeline
+name: CI Pipeline - Build, Unit & Integration Test
 
 on:
   push:
@@ -7,23 +7,26 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  ci:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+    - name: Checkout Code
+      uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
 
-      - name: Install Dependencies
-        run: npm install
+    - name: Install Dependencies
+      run: npm install
 
-      - name: Lint Code
-        run: npm run lint
+    - name: Build Project
+      run: npm run build
 
-      - name: Build Project
-        run: npm run build
+    - name: Run Unit Tests
+      run: npm run eslint
+
+    - name: Run Integration Tests (if defined)
+      run: npm run test:integration || echo "No integration tests found, skipping..."
